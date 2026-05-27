@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Clock, Check, Calendar, User, Mail, Phone, ArrowRight } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 const SERVICE_INFO = {
   grooming: { title: 'Full Grooming', price: 499, duration: '90 min', icon: '✂️' },
@@ -19,7 +20,11 @@ function getFirstDayOfMonth(year, month) {
   return new Date(year, month, 1).getDay();
 }
 
-export default function BookingCalendarPage() {
+export default function BookingCalendarPage({onLoginClick}) {
+  const location = useLocation();
+  const isConsultationPage =
+    location.pathname === '/consultation';
+
   const { serviceId } = useParams();
   const navigate = useNavigate();
   const service = SERVICE_INFO[serviceId] || SERVICE_INFO.consultation;
@@ -70,9 +75,11 @@ export default function BookingCalendarPage() {
 
         {/* Left: Info */}
         <div className="booking-sidebar">
+          {!isConsultationPage && (
           <button className="booking-back-btn" onClick={() => navigate('/services')}>
             <ChevronLeft size={16} /> Back to Services
           </button>
+          )}
 
           <div className="booking-svc-card">
             <span className="booking-svc-icon">{service.icon}</span>
@@ -244,6 +251,10 @@ export default function BookingCalendarPage() {
                     className="booking-textarea" rows={3}/>
                 </div>
 
+                <div className="login-notice">
+                   Have an account? <span onClick={onLoginClick}>Log in</span>
+                </div>
+
                 <button type="submit" className="booking-next-btn" disabled={loading}>
                   {loading ? <span className="auth-spinner"/> : <>Confirm Booking ₹{service.price} <Check size={16}/></>}
                 </button>
@@ -388,6 +399,20 @@ export default function BookingCalendarPage() {
           border-radius: var(--radius-sm); transition: var(--transition-smooth);
           padding-left: 12px;
         }
+
+        .login-notice {
+  text-align: center;
+  margin: 20px 0 10px;
+  color: var(--text-medium);
+  font-size: 14px;
+}
+
+.login-notice span {
+  color: var(--secondary-color);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
 
         .booking-input-wrap:focus-within { border-color: var(--primary-color); background: white; box-shadow: 0 0 0 3px rgba(10,88,164,0.1); }
         .booking-input-wrap svg { color: var(--text-light); flex-shrink: 0; }

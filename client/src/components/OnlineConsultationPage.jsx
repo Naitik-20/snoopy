@@ -20,7 +20,7 @@ const slots = [
   '06:00 PM',
 ];
 
-export default function OnlineConsultationPage() {
+export default function OnlineConsultationPage({onLoginClick}) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState('');
   
@@ -43,7 +43,7 @@ export default function OnlineConsultationPage() {
         </div>
       </div>
 
-       <BookingCalendarPage />
+       <BookingCalendarPage onLoginClick={onLoginClick} />
 
      
     

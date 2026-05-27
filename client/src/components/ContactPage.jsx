@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, MessageSquare } from 'lucide-react';
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone:'', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -126,6 +126,25 @@ export default function ContactPage() {
                   </div>
 
                   <div className="contact-field">
+    <label>Phone Number *</label>
+
+    <input
+      type="tel"
+      required
+      placeholder="+91 9876543210"
+      value={form.phone || ''}
+      onChange={e =>
+        setForm({
+          ...form,
+          phone: e.target.value
+        })
+      }
+      className="contact-input"
+    />
+  </div>
+
+                  <div className="contact-field">
+                  
                     <label>Subject</label>
                     <select
                       value={form.subject}

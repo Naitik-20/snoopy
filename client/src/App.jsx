@@ -162,8 +162,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         
         {/* Online Consultation Route */}
-        <Route path="/consultation" element={<OnlineConsultationPage />} />
-        
+        <Route path="/consultation" element={ <OnlineConsultationPage onLoginClick={() => setIsAuthOpen(true)}  /> } />        
       
         {/* Home Page Route */}
         <Route path="/" element={<HomePage />} />
