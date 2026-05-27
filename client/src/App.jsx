@@ -9,6 +9,7 @@ import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
 import ServicesPage from './components/ServicesPage';
 import BookingCalendarPage from './components/BookingCalendarPage';
+import OnlineConsultationPage from './components/OnlineConsultationPage';
 import ContactPage from './components/ContactPage';
 import HomePage from './pages/HomePage';
 import { SlidersHorizontal, ArrowUpDown } from 'lucide-react';
@@ -133,6 +134,7 @@ function App() {
         <Route path="/category/:categoryName" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />} />
         <Route path="/services" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />} />
         <Route path="/contact" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />} />
+        <Route path="/consultation" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />}/>
         <Route path="/online-consultation/:serviceId" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />} />
       </Routes>
       
@@ -158,7 +160,11 @@ function App() {
 
         {/* Contact Page Route */}
         <Route path="/contact" element={<ContactPage />} />
-
+        
+        {/* Online Consultation Route */}
+        <Route path="/consultation" element={<OnlineConsultationPage />} />
+        
+      
         {/* Home Page Route */}
         <Route path="/" element={<HomePage />} />
 
