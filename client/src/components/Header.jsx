@@ -44,6 +44,7 @@ export default function Header({
     { label: 'Home', path: '/' },
     { label: 'Shop', path: '/shop' },
     { label: 'Services', path: '/services' },
+    { label: 'Online Consultation', path: '/consultation' },
     { label: 'Contact', path: '/contact' },
   ];
 

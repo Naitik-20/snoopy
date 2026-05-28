@@ -1,14 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import ProductCard from './components/ProductCard';
 import ProductDetailModal from './components/ProductDetailModal';
 import CartDrawer from './components/CartDrawer';
+import CheckoutPage from './components/CheckoutPage';
 import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
+import TermsPage from "./components/TermsPage";
+import ShippingPolicyPage from "./components/ShippingPolicyPage";
+import RefundPolicyPage from "./components/RefundPolicyPage";
 import ServicesPage from './components/ServicesPage';
+import PrivacyPolicyPage from "./components/PrivacyPolicyPage";
 import BookingCalendarPage from './components/BookingCalendarPage';
+import OnlineConsultationPage from './components/OnlineConsultationPage';
 import ContactPage from './components/ContactPage';
 import HomePage from './pages/HomePage';
 import { SlidersHorizontal, ArrowUpDown } from 'lucide-react';
@@ -49,7 +56,9 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const hideLayout =
+  location.pathname === '/checkout';
   const handleCategoryChange = (category) => {
     if (category === 'All Products') {
       navigate('/');
@@ -133,10 +142,12 @@ function App() {
         <Route path="/category/:categoryName" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />} />
         <Route path="/services" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />} />
         <Route path="/contact" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />} />
+        <Route path="/consultation" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />}/>
         <Route path="/online-consultation/:serviceId" element={<CategoryUpdater setSelectedCategory={setSelectedCategory} />} />
       </Routes>
       
       {/* Site Header */}
+      {!hideLayout && (
       <Header
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -147,6 +158,7 @@ function App() {
         onLogout={() => setUser(null)}
         onToggleMobileSidebar={() => setIsMobileSidebarOpen(true)}
       />
+      )}
 
       {/* Dynamic Main Body Content based on Path */}
       <Routes>
@@ -159,6 +171,29 @@ function App() {
         {/* Contact Page Route */}
         <Route path="/contact" element={<ContactPage />} />
 
+        {/* Checkout Page Route */}
+        <Route path="/checkout" element={<CheckoutPage />} />
+        
+        {/* Online Consultation Route */}
+        <Route path="/consultation" element={ <OnlineConsultationPage onLoginClick={() => setIsAuthOpen(true)}  /> } />    
+
+         <Route path="/terms" element={<TermsPage />} />
+
+<Route
+  path="/privacy-policy"
+  element={<PrivacyPolicyPage />}
+/>
+
+<Route
+  path="/shipping-policy"
+  element={<ShippingPolicyPage />}
+/>
+
+<Route
+  path="/refund-policy"
+  element={<RefundPolicyPage />}
+/>     
+      
         {/* Home Page Route */}
         <Route path="/" element={<HomePage />} />
 
@@ -305,7 +340,9 @@ function App() {
       )}
 
       {/* Footer */}
+      {!hideLayout &&
       <Footer />
+}
 
       {/* Localized custom scoped CSS styles */}
       <style>{`

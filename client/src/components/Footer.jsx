@@ -35,6 +35,13 @@ export default function Footer() {
     { label: 'Contact Us', path: '/contact' },
   ];
 
+  const policies = [
+  { label: 'Privacy Policy', path: '/privacy-policy' },
+  { label: 'Terms & Conditions', path: '/terms' },
+  { label: 'Shipping Policy', path: '/shipping-policy' },
+  { label: 'Refund Policy', path: '/refund-policy' },
+];
+
   const topBrands = ['Royal Canin', 'Pedigree', 'Drools', 'Whiskas', 'Himalaya', 'Purepet'];
 
   return (
@@ -133,6 +140,23 @@ export default function Footer() {
           </ul>
         </div>
 
+
+{/* Policies */}
+<div className="footer-col">
+  <h4 className="footer-col-title">Policies</h4>
+
+  <ul className="footer-link-list">
+    {policies.map((policy) => (
+      <li key={policy.label}>
+        <Link to={policy.path} className="footer-link">
+          <ArrowRight size={12} />
+          {policy.label}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</div>
+
         {/* Column 4: Contact */}
         <div className="footer-col">
           <h4 className="footer-col-title">Contact Us</h4>
@@ -174,11 +198,21 @@ export default function Footer() {
           <p className="footer-copyright">
             © {currentYear} Dr. Snoopy Pet Store. All rights reserved.
           </p>
-          <div className="footer-bottom-links">
-            <a href="#" className="footer-bottom-link">Privacy Policy</a>
-            <a href="#" className="footer-bottom-link">Terms of Service</a>
-            <a href="#" className="footer-bottom-link">Refund Policy</a>
-          </div>
+        <div className="footer-bottom-links">
+
+  <Link to="/privacy-policy" className="footer-bottom-link">
+    Privacy Policy
+  </Link>
+
+  <Link to="/terms" className="footer-bottom-link">
+    Terms of Service
+  </Link>
+
+  <Link to="/refund-policy" className="footer-bottom-link">
+    Refund Policy
+  </Link>
+
+</div>
         </div>
       </div>
 
@@ -230,7 +264,7 @@ export default function Footer() {
         /* Footer body */
         .footer-body {
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1.5fr;
+          grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
           gap: 40px;
           padding-top: 56px;
           padding-bottom: 56px;
