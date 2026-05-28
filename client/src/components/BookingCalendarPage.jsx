@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Clock, Check, Calendar, User, Mail, Phone, ArrowRight, ChevronDown } from 'lucide-react';
 
 const SERVICE_INFO = {
@@ -47,9 +47,11 @@ function getFirstDayOfMonth(year, month) {
   return new Date(year, month, 1).getDay();
 }
 
-export default function BookingCalendarPage() {
+export default function BookingCalendarPage({ onLoginClick }) {
   const { serviceId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isConsultationPage = location.pathname.includes('/consultation') || location.pathname.includes('/online-consultation');
   const service = SERVICE_INFO[serviceId] || SERVICE_INFO.consultation;
 
   const today = new Date();
@@ -111,7 +113,7 @@ export default function BookingCalendarPage() {
       <div className="booking-container container">
         
         {/* Step-back to services button */}
-        {step < 3 && (
+        {step < 3 && !isConsultationPage && (
           <button className="booking-back-btn" onClick={() => step === 2 ? setStep(1) : navigate('/services')}>
             <ChevronLeft size={16} /> {step === 2 ? 'Back to Date & Time' : 'Back to Services'}
           </button>
@@ -280,6 +282,10 @@ export default function BookingCalendarPage() {
                       <textarea placeholder="Any special instructions for the care taker, health concerns, etc."
                         value={form.notes} onChange={e => setForm({...form, notes: e.target.value})}
                         className="booking-textarea" rows={4}/>
+                    </div>
+
+                    <div className="login-notice" style={{ marginTop: '16px', textAlign: 'center', fontSize: '14px', color: '#a48c75' }}>
+                      Have an account? <span onClick={onLoginClick} style={{ color: '#f7931e', fontWeight: '750', cursor: 'pointer', textDecoration: 'underline' }}>Log in</span>
                     </div>
                   </form>
                 </div>
