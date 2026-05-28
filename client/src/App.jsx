@@ -9,7 +9,11 @@ import CartDrawer from './components/CartDrawer';
 import CheckoutPage from './components/CheckoutPage';
 import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
+import TermsPage from "./components/TermsPage";
+import ShippingPolicyPage from "./components/ShippingPolicyPage";
+import RefundPolicyPage from "./components/RefundPolicyPage";
 import ServicesPage from './components/ServicesPage';
+import PrivacyPolicyPage from "./components/PrivacyPolicyPage";
 import BookingCalendarPage from './components/BookingCalendarPage';
 import OnlineConsultationPage from './components/OnlineConsultationPage';
 import ContactPage from './components/ContactPage';
@@ -171,7 +175,24 @@ function App() {
         <Route path="/checkout" element={<CheckoutPage />} />
         
         {/* Online Consultation Route */}
-        <Route path="/consultation" element={ <OnlineConsultationPage onLoginClick={() => setIsAuthOpen(true)}  /> } />        
+        <Route path="/consultation" element={ <OnlineConsultationPage onLoginClick={() => setIsAuthOpen(true)}  /> } />    
+
+         <Route path="/terms" element={<TermsPage />} />
+
+<Route
+  path="/privacy-policy"
+  element={<PrivacyPolicyPage />}
+/>
+
+<Route
+  path="/shipping-policy"
+  element={<ShippingPolicyPage />}
+/>
+
+<Route
+  path="/refund-policy"
+  element={<RefundPolicyPage />}
+/>     
       
         {/* Home Page Route */}
         <Route path="/" element={<HomePage />} />
