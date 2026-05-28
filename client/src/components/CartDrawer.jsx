@@ -195,7 +195,7 @@ export default function CartDrawer({
             </div>
 
             {/* Checkout button */}
-            <button className="drawer-checkout-btn" onClick={handleCheckout}>
+            <button className="drawer-checkout-btn"  onClick={() => navigate('/checkout')}>
               Proceed to Checkout <ArrowRight size={17} />
             </button>
 
