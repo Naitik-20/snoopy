@@ -360,6 +360,59 @@ export default function BookingCalendarPage() {
           </div>
         )}
 
+        {step < 3 && (
+          <section className="why-consult-section">
+            <h2 className="why-consult-title">
+              Why consult with <span className="highlight-text">Dr. Snoopy</span>?
+            </h2>
+            
+            <div className="why-consult-stepper">
+              <div className="why-step-item">
+                <div className="why-step-img-container">
+                  <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=150&h=150&q=80" alt="Book appointment" className="why-step-img" />
+                </div>
+                <p className="why-step-desc">Book your appointment easily through our <strong>online portal</strong></p>
+              </div>
+              
+              <div className="why-step-connector"></div>
+              
+              <div className="why-step-item">
+                <div className="why-step-img-container">
+                  <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=150&h=150&q=80" alt="Clear diagnosis" className="why-step-img" />
+                </div>
+                <p className="why-step-desc">Get a clear diagnosis and <strong>customized treatment plan</strong></p>
+              </div>
+              
+              <div className="why-step-connector"></div>
+              
+              <div className="why-step-item">
+                <div className="why-step-img-container">
+                  <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=150&h=150&q=80" alt="Consultation" className="why-step-img" />
+                </div>
+                <p className="why-step-desc">Meet your doctor for a personalized health <strong>consultation</strong></p>
+              </div>
+              
+              <div className="why-step-connector"></div>
+              
+              <div className="why-step-item">
+                <div className="why-step-img-container">
+                  <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=150&h=150&q=80" alt="Expert guidance" className="why-step-img" />
+                </div>
+                <p className="why-step-desc">Discuss symptoms and receive expert medical <strong>guidance instantly</strong></p>
+              </div>
+              
+              <div className="why-step-connector"></div>
+              
+              <div className="why-step-item">
+                <div className="why-step-img-container">
+                  <img src="https://images.unsplash.com/photo-1535268647977-a403b6907eac?auto=format&fit=crop&w=150&h=150&q=80" alt="Recovery support" className="why-step-img" />
+                </div>
+                <p className="why-step-desc">Begin your recovery with continuous <strong>care and support</strong></p>
+              </div>
+            </div>
+          </section>
+        )}
+
       </div>
 
       <style>{`
@@ -1020,6 +1073,94 @@ export default function BookingCalendarPage() {
           to { transform: rotate(360deg); } 
         }
 
+        /* Why Consult Section */
+        .why-consult-section {
+          margin-top: 64px;
+          padding-top: 48px;
+          border-top: 1.5px solid #ebd3bd;
+          text-align: center;
+        }
+
+        .why-consult-title {
+          font-size: 32px;
+          font-weight: 900;
+          color: #0a58a4;
+          font-family: 'Outfit', sans-serif;
+          margin-bottom: 48px;
+          letter-spacing: -0.5px;
+        }
+
+        .why-consult-title .highlight-text {
+          color: #f7931e;
+        }
+
+        .why-consult-stepper {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          max-width: 1000px;
+          margin: 0 auto;
+          gap: 8px;
+        }
+
+        .why-step-item {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          max-width: 180px;
+        }
+
+        .why-step-img-container {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          border: 2px solid #f7931e;
+          padding: 4px;
+          background: #ffffff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 14px rgba(247, 147, 30, 0.06);
+        }
+
+        .why-step-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+
+        .why-step-item:hover .why-step-img-container {
+          transform: scale(1.06);
+          border-color: #0a58a4;
+          box-shadow: 0 6px 18px rgba(10, 88, 164, 0.12);
+        }
+
+        .why-step-desc {
+          font-size: 13.5px;
+          color: #718096;
+          line-height: 1.5;
+          margin-top: 16px;
+          font-weight: 500;
+        }
+
+        .why-step-desc strong {
+          color: #2d3748;
+          font-weight: 700;
+        }
+
+        .why-step-connector {
+          height: 1.5px;
+          border-top: 2.5px dotted #ebd3bd;
+          flex-grow: 1;
+          margin-top: 60px;
+          max-width: 80px;
+        }
+
         /* Responsive styling */
         @media (max-width: 1024px) {
           .booking-grid {
@@ -1042,6 +1183,17 @@ export default function BookingCalendarPage() {
           }
           .time-slots-grid {
             grid-template-columns: repeat(2, 1fr);
+          }
+          .why-consult-stepper {
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+          }
+          .why-step-connector {
+            display: none;
+          }
+          .why-step-item {
+            max-width: 260px;
           }
         }
       `}</style>

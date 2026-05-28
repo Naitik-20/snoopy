@@ -48,3 +48,26 @@
 ### Runtime Understanding
 - Agar remote repository par koi external changes pehle se commit ho chuki hain jo aapke local branch par nahi hain, toh direct push error dega (`rejected - non-fast-forward`). Pehle changes ko local repository me pull aur rebase (`git pull --rebase`) karna padta hai.
 
+---
+
+## Concept: Case Sensitivity & Component Renaming in Git (Windows vs. Linux)
+
+### Core Concept
+- **Case Sensitivity Mismatch**: Windows and macOS (by default) filesystems are case-insensitive (matlab OS ke liye `ProductCard.jsx` aur `productCard.jsx` identical hain). Lekin Linux servers (jahan hum live websites host karte hain, e.g., Vercel, Render, AWS, Netlify) strictly **case-sensitive** hote hain.
+- **Git `ignorecase` Config**: Windows environment me Git default me `core.ignorecase = true` par set hota hai. Agar aap direct lowercase se uppercase folder/file rename karte ho, toh Git status me changes detect nahi hotey.
+
+### Data Flow & Import Resolution
+- **Dev Compiler Flow (Windows)**:
+  `App.jsx` (`import ProductCard`) -> Resolves to `components/productCard.jsx` -> Compiles & runs locally.
+- **Prod Build Flow (Linux/Vercel)**:
+  `App.jsx` (`import ProductCard`) -> Looks for `components/ProductCard.jsx` -> Fails (kyuki Git me lowercase `productCard.jsx` store hua hai) -> Build crashes with `ModuleNotFound` error.
+
+### Runtime & Workflow Fixing (Bypassing the Casing Trap)
+Git me standard uppercase renaming force karne ke liye hum **two-step renaming** use karte hain:
+1. File ko temporary name do:
+   `git mv client/src/components/productCard.jsx client/src/components/ProductCardTemp.jsx`
+2. Final capitalized name me rename karo:
+   `git mv client/src/components/ProductCardTemp.jsx client/src/components/ProductCard.jsx`
+Isse Git history me capital casing permanently register ho jaati hai!
+
+

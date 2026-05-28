@@ -16,6 +16,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, backendUrl 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showEmailForm, setShowEmailForm] = useState(false);
 
   // Login form state
   const [loginData, setLoginData] = useState({ email: '', password: '' });
@@ -29,12 +30,52 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, backendUrl 
   useEffect(() => {
     if (!isOpen) {
       setError(''); setSuccess(''); setLoading(false);
+      setShowEmailForm(false);
       setLoginData({ email: '', password: '' });
       setRegData({ name: '', email: '', password: '', confirmPass: '', role: 'user' });
     }
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
+
+  const handleTabChange = (newTab) => {
+    setTab(newTab);
+    setError('');
+    setShowEmailForm(false);
+  };
+
+  // ── SOCIAL AUTH HANDLERS ──────────────────────────────────
+  const handleGoogleAuth = () => {
+    setError('');
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      onLoginSuccess({
+        name: 'Google User',
+        email: 'google.user@gmail.com',
+        avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=google',
+        role: 'user'
+      });
+      setSuccess('Logged in with Google! Welcome back 🐾');
+      setTimeout(onClose, 1200);
+    }, 1000);
+  };
+
+  const handleFacebookAuth = () => {
+    setError('');
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      onLoginSuccess({
+        name: 'Facebook User',
+        email: 'facebook.user@outlook.com',
+        avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=facebook',
+        role: 'user'
+      });
+      setSuccess('Logged in with Facebook! Welcome back 🐾');
+      setTimeout(onClose, 1200);
+    }, 1000);
+  };
 
   // Close on Escape
   useEffect(() => {
@@ -139,10 +180,10 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, backendUrl 
         <div className="auth-form-panel">
           {/* Tabs */}
           <div className="auth-tabs">
-            <button className={`auth-tab ${tab === 'login' ? 'active' : ''}`} onClick={() => { setTab('login'); setError(''); }}>
+            <button className={`auth-tab ${tab === 'login' ? 'active' : ''}`} onClick={() => handleTabChange('login')}>
               Login
             </button>
-            <button className={`auth-tab ${tab === 'register' ? 'active' : ''}`} onClick={() => { setTab('register'); setError(''); }}>
+            <button className={`auth-tab ${tab === 'register' ? 'active' : ''}`} onClick={() => handleTabChange('register')}>
               Register
             </button>
           </div>
@@ -158,148 +199,193 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, backendUrl 
           {error && <div className="auth-alert auth-error">{error}</div>}
           {success && <div className="auth-alert auth-success">{success}</div>}
 
-          {/* ── LOGIN FORM ── */}
-          {tab === 'login' && (
-            <form className="auth-form" onSubmit={handleLogin}>
-              <div className="auth-field">
-                <label className="auth-label">Email Address</label>
-                <div className="auth-input-wrap">
-                  <Mail size={16} className="auth-input-icon" />
-                  <input
-                    type="email"
-                    placeholder="you@example.com"
-                    value={loginData.email}
-                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                    className="auth-input"
-                    required
-                    autoFocus
-                  />
-                </div>
-              </div>
+          {/* Social Authentication Block */}
+          <div className="auth-social-btns">
+            <button 
+              type="button" 
+              className="auth-social-btn google" 
+              onClick={handleGoogleAuth}
+              disabled={loading}
+            >
+              <svg className="auth-social-icon" viewBox="0 0 24 24" width="20" height="20">
+                <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.68 1.54 14.98 1 12 1 7.35 1 3.37 3.67 1.39 7.56l3.85 2.99c.9-2.7 3.4-4.51 6.76-4.51z"/>
+                <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.34H12v4.44h6.44c-.28 1.48-1.12 2.73-2.37 3.58v2.98h3.84c2.24-2.06 3.58-5.1 3.58-8.66z"/>
+                <path fill="#FBBC05" d="M5.24 10.55c-.23-.69-.36-1.42-.36-2.18s.13-1.49.36-2.18L1.39 5.2A11.957 11.957 0 000 12c0 2.56.8 4.93 2.18 6.9l3.85-2.99c-.47-.83-.79-1.84-.79-3.36z"/>
+                <path fill="#34A853" d="M12 23c3.24 0 5.97-1.08 7.96-2.91l-3.84-2.98c-1.14.77-2.6 1.22-4.12 1.22-3.36 0-5.86-1.81-6.76-4.51L1.39 16.8C3.37 20.33 7.35 23 12 23z"/>
+              </svg>
+              <span>{tab === 'login' ? 'Sign in with Google' : 'Sign up with Google'}</span>
+            </button>
+            
+            <button 
+              type="button" 
+              className="auth-social-btn facebook" 
+              onClick={handleFacebookAuth}
+              disabled={loading}
+            >
+              <svg className="auth-social-icon" viewBox="0 0 24 24" width="20" height="20" fill="white">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              <span>{tab === 'login' ? 'Sign in with Facebook' : 'Sign up with Facebook'}</span>
+            </button>
+          </div>
 
-              <div className="auth-field">
-                <label className="auth-label">Password</label>
-                <div className="auth-input-wrap">
-                  <Lock size={16} className="auth-input-icon" />
-                  <input
-                    type={showPass ? 'text' : 'password'}
-                    placeholder="Your password"
-                    value={loginData.password}
-                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                    className="auth-input"
-                    required
-                  />
-                  <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(!showPass)}>
-                    {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+          <div className="auth-separator">or</div>
+
+          {/* Toggle form visibility button or form itself */}
+          {!showEmailForm ? (
+            <button 
+              type="button" 
+              className="auth-email-toggle-btn"
+              onClick={() => setShowEmailForm(true)}
+            >
+              {tab === 'login' ? 'Sign in with email' : 'Sign up with email'}
+            </button>
+          ) : (
+            <>
+              {/* ── LOGIN FORM ── */}
+              {tab === 'login' && (
+                <form className="auth-form" onSubmit={handleLogin}>
+                  <div className="auth-field">
+                    <label className="auth-label">Email Address</label>
+                    <div className="auth-input-wrap">
+                      <Mail size={16} className="auth-input-icon" />
+                      <input
+                        type="email"
+                        placeholder="you@example.com"
+                        value={loginData.email}
+                        onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                        className="auth-input"
+                        required
+                        autoFocus
+                      />
+                    </div>
+                  </div>
+
+                  <div className="auth-field">
+                    <label className="auth-label">Password</label>
+                    <div className="auth-input-wrap">
+                      <Lock size={16} className="auth-input-icon" />
+                      <input
+                        type={showPass ? 'text' : 'password'}
+                        placeholder="Your password"
+                        value={loginData.password}
+                        onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                        className="auth-input"
+                        required
+                      />
+                      <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(!showPass)}>
+                        {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="auth-submit-btn" disabled={loading}>
+                    {loading ? <span className="auth-spinner" /> : <><ArrowRight size={16} /> Login</>}
                   </button>
-                </div>
-              </div>
 
-              <button type="submit" className="auth-submit-btn" disabled={loading}>
-                {loading ? <span className="auth-spinner" /> : <><ArrowRight size={16} /> Login</>}
-              </button>
+                  <p className="auth-switch-text">
+                    Don't have an account?{' '}
+                    <button type="button" className="auth-switch-link" onClick={() => handleTabChange('register')}>
+                      Create one
+                    </button>
+                  </p>
+                </form>
+              )}
 
-              <p className="auth-switch-text">
-                Don't have an account?{' '}
-                <button type="button" className="auth-switch-link" onClick={() => setTab('register')}>
-                  Create one
-                </button>
-              </p>
-            </form>
-          )}
+              {/* ── REGISTER FORM ── */}
+              {tab === 'register' && (
+                <form className="auth-form" onSubmit={handleRegister}>
+                  <div className="auth-field">
+                    <label className="auth-label">Full Name</label>
+                    <div className="auth-input-wrap">
+                      <User size={16} className="auth-input-icon" />
+                      <input
+                        type="text"
+                        placeholder="Your full name"
+                        value={regData.name}
+                        onChange={(e) => setRegData({ ...regData, name: e.target.value })}
+                        className="auth-input"
+                        required
+                        autoFocus
+                      />
+                    </div>
+                  </div>
 
-          {/* ── REGISTER FORM ── */}
-          {tab === 'register' && (
-            <form className="auth-form" onSubmit={handleRegister}>
-              <div className="auth-field">
-                <label className="auth-label">Full Name</label>
-                <div className="auth-input-wrap">
-                  <User size={16} className="auth-input-icon" />
-                  <input
-                    type="text"
-                    placeholder="Your full name"
-                    value={regData.name}
-                    onChange={(e) => setRegData({ ...regData, name: e.target.value })}
-                    className="auth-input"
-                    required
-                    autoFocus
-                  />
-                </div>
-              </div>
+                  <div className="auth-field">
+                    <label className="auth-label">Email Address</label>
+                    <div className="auth-input-wrap">
+                      <Mail size={16} className="auth-input-icon" />
+                      <input
+                        type="email"
+                        placeholder="you@example.com"
+                        value={regData.email}
+                        onChange={(e) => setRegData({ ...regData, email: e.target.value })}
+                        className="auth-input"
+                        required
+                      />
+                    </div>
+                  </div>
 
-              <div className="auth-field">
-                <label className="auth-label">Email Address</label>
-                <div className="auth-input-wrap">
-                  <Mail size={16} className="auth-input-icon" />
-                  <input
-                    type="email"
-                    placeholder="you@example.com"
-                    value={regData.email}
-                    onChange={(e) => setRegData({ ...regData, email: e.target.value })}
-                    className="auth-input"
-                    required
-                  />
-                </div>
-              </div>
+                  <div className="auth-field">
+                    <label className="auth-label">Password</label>
+                    <div className="auth-input-wrap">
+                      <Lock size={16} className="auth-input-icon" />
+                      <input
+                        type={showPass ? 'text' : 'password'}
+                        placeholder="Create a password"
+                        value={regData.password}
+                        onChange={(e) => setRegData({ ...regData, password: e.target.value })}
+                        className="auth-input"
+                        required
+                        minLength={6}
+                      />
+                      <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(!showPass)}>
+                        {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                      </button>
+                    </div>
+                  </div>
 
-              <div className="auth-field">
-                <label className="auth-label">Password</label>
-                <div className="auth-input-wrap">
-                  <Lock size={16} className="auth-input-icon" />
-                  <input
-                    type={showPass ? 'text' : 'password'}
-                    placeholder="Create a password"
-                    value={regData.password}
-                    onChange={(e) => setRegData({ ...regData, password: e.target.value })}
-                    className="auth-input"
-                    required
-                    minLength={6}
-                  />
-                  <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(!showPass)}>
-                    {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                  <div className="auth-field">
+                    <label className="auth-label">Confirm Password</label>
+                    <div className="auth-input-wrap">
+                      <Lock size={16} className="auth-input-icon" />
+                      <input
+                        type="password"
+                        placeholder="Confirm your password"
+                        value={regData.confirmPass}
+                        onChange={(e) => setRegData({ ...regData, confirmPass: e.target.value })}
+                        className="auth-input"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="auth-field">
+                    <label className="auth-label">Account Type</label>
+                    <select
+                      value={regData.role}
+                      onChange={(e) => setRegData({ ...regData, role: e.target.value })}
+                      className="auth-select"
+                    >
+                      <option value="user">Customer (Normal User)</option>
+                      <option value="wholeseller">Wholeseller</option>
+                    </select>
+                    <p className="auth-hint">Admin accounts are created by the system only.</p>
+                  </div>
+
+                  <button type="submit" className="auth-submit-btn" disabled={loading}>
+                    {loading ? <span className="auth-spinner" /> : <><ArrowRight size={16} /> Create Account</>}
                   </button>
-                </div>
-              </div>
 
-              <div className="auth-field">
-                <label className="auth-label">Confirm Password</label>
-                <div className="auth-input-wrap">
-                  <Lock size={16} className="auth-input-icon" />
-                  <input
-                    type="password"
-                    placeholder="Confirm your password"
-                    value={regData.confirmPass}
-                    onChange={(e) => setRegData({ ...regData, confirmPass: e.target.value })}
-                    className="auth-input"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="auth-field">
-                <label className="auth-label">Account Type</label>
-                <select
-                  value={regData.role}
-                  onChange={(e) => setRegData({ ...regData, role: e.target.value })}
-                  className="auth-select"
-                >
-                  <option value="user">Customer (Normal User)</option>
-                  <option value="wholeseller">Wholeseller</option>
-                </select>
-                <p className="auth-hint">Admin accounts are created by the system only.</p>
-              </div>
-
-              <button type="submit" className="auth-submit-btn" disabled={loading}>
-                {loading ? <span className="auth-spinner" /> : <><ArrowRight size={16} /> Create Account</>}
-              </button>
-
-              <p className="auth-switch-text">
-                Already have an account?{' '}
-                <button type="button" className="auth-switch-link" onClick={() => setTab('login')}>
-                  Login
-                </button>
-              </p>
-            </form>
+                  <p className="auth-switch-text">
+                    Already have an account?{' '}
+                    <button type="button" className="auth-switch-link" onClick={() => handleTabChange('login')}>
+                      Login
+                    </button>
+                  </p>
+                </form>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -439,6 +525,107 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, backendUrl 
         }
 
         .auth-switch-link:hover { text-decoration: underline; }
+
+        /* Social Authentication Buttons */
+        .auth-social-btns {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 20px;
+          width: 100%;
+        }
+
+        .auth-social-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          width: 100%;
+          padding: 12px;
+          font-size: 15px;
+          font-weight: 700;
+          border-radius: var(--radius-sm);
+          cursor: pointer;
+          transition: var(--transition-smooth);
+          border: 1.5px solid var(--border-light);
+        }
+
+        .auth-social-btn.google {
+          background: #ffffff;
+          color: #2d3748;
+          border-color: #ebd3bd;
+        }
+
+        .auth-social-btn.google:hover:not(:disabled) {
+          background: #fdfaf7;
+          border-color: #f7931e;
+          transform: translateY(-1px);
+        }
+
+        .auth-social-btn.facebook {
+          background: #1877f2;
+          color: #ffffff;
+          border-color: #1877f2;
+        }
+
+        .auth-social-btn.facebook:hover:not(:disabled) {
+          background: #166fe5;
+          border-color: #166fe5;
+          transform: translateY(-1px);
+        }
+
+        .auth-social-icon {
+          flex-shrink: 0;
+        }
+
+        /* Or Separator */
+        .auth-separator {
+          display: flex;
+          align-items: center;
+          text-align: center;
+          color: var(--text-light);
+          font-size: 14px;
+          margin: 20px 0;
+          font-weight: 600;
+        }
+
+        .auth-separator::before,
+        .auth-separator::after {
+          content: '';
+          flex: 1;
+          border-bottom: 1.5px solid #ebd3bd;
+        }
+
+        .auth-separator:not(:empty)::before {
+          margin-right: 12px;
+        }
+
+        .auth-separator:not(:empty)::after {
+          margin-left: 12px;
+        }
+
+        /* Toggle Email Form Button */
+        .auth-email-toggle-btn {
+          width: 100%;
+          padding: 12px;
+          background: #ffffff;
+          color: var(--primary-color);
+          border: 1.5px solid var(--primary-color);
+          border-radius: var(--radius-sm);
+          font-size: 15px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: var(--transition-smooth);
+          text-align: center;
+        }
+
+        .auth-email-toggle-btn:hover:not(:disabled) {
+          background: #fff8f0;
+          border-color: var(--primary-hover);
+          color: var(--primary-hover);
+          transform: translateY(-1.5px);
+          box-shadow: 0 4px 12px rgba(247, 147, 30, 0.08);
+        }
 
         @media (max-width: 600px) {
           .auth-modal { flex-direction: column; }
