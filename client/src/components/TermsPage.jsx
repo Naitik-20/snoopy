@@ -1,4 +1,4 @@
-import "./PolicyPage.css";
+import "./PolicyPages.css";
 
 export default function TermsPage() {
   return (

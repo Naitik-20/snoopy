@@ -140,13 +140,67 @@ export default function Header({
                       <p className="dropdown-user-email">{user.email}</p>
                     </div>
                     <hr className="dropdown-divider" />
-                    <Link to="/profile" className="dropdown-item" onClick={() => setIsUserDropdownOpen(false)}>
-                      <User size={14} /> My Profile
-                    </Link>
-                    <button className="dropdown-item dropdown-logout"
-                      onClick={() => { onLogout(); setIsUserDropdownOpen(false); }}>
-                      <LogOut size={14} /> Logout
-                    </button>
+                   <Link
+  to="/account"
+  className="dropdown-item"
+  onClick={() => setIsUserDropdownOpen(false)}
+>
+  <User size={14} />
+  My Account
+</Link>
+
+<Link
+  to="/orders"
+  className="dropdown-item"
+  onClick={() => setIsUserDropdownOpen(false)}
+>
+  My Orders
+</Link>
+
+<Link
+  to="/addresses"
+  className="dropdown-item"
+  onClick={() => setIsUserDropdownOpen(false)}
+>
+  My Addresses
+</Link>
+
+<Link
+  to="/wallet"
+  className="dropdown-item"
+  onClick={() => setIsUserDropdownOpen(false)}
+>
+  My Wallet
+</Link>
+
+<Link
+  to="/wishlist"
+  className="dropdown-item"
+  onClick={() => setIsUserDropdownOpen(false)}
+>
+  My Wishlist
+</Link>
+
+<Link
+  to="/bookings"
+  className="dropdown-item"
+  onClick={() => setIsUserDropdownOpen(false)}
+>
+  My Bookings
+</Link>
+
+<hr className="dropdown-divider" />
+
+<button
+  className="dropdown-item dropdown-logout"
+  onClick={() => {
+    onLogout();
+    setIsUserDropdownOpen(false);
+  }}
+>
+  <LogOut size={14} />
+  Logout
+</button>
                   </div>
                 )}
               </div>

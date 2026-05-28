@@ -118,13 +118,39 @@ export default function ServicesPage() {
         </div>
       </div>
 
+      {/* ── GET IN TOUCH ── */}
+      <div className="services-git-section">
+        <div className="services-git-inner container">
+          <h2 className="services-git-title">
+            <span className="orange-text">Get In</span> <span className="blue-text">Touch</span>
+          </h2>
+          <p className="services-git-desc">
+            Have questions about our products or need help choosing the best for your furry friend? 
+            We're here to help! Reach out to us anytime — our team loves connecting 
+            with pet parents and making tails wag.
+          </p>
+          <Link to="/contact" className="services-git-btn">
+            Contact Us
+          </Link>
+        </div>
+      </div>
+
       <style>{`
         .services-page { background: var(--bg-main); min-height: 100vh; }
 
         .services-hero {
+<<<<<<< HEAD
           background: linear-gradient(135deg, #0d1b2a, #1a3a6a);
           padding: 72px 0 60px;
           text-align: center;
+=======
+          background: linear-gradient(rgba(10, 25, 47, 0.75), rgba(15, 34, 64, 0.85)), 
+                      url('/services-hero-bg.png') no-repeat center center;
+          background-size: cover;
+          padding: 100px 0 90px;
+          text-align: center;
+          position: relative;
+>>>>>>> 4d65c12d32117059894ff540579bea8645f692da
         }
 
         .services-hero-inner { max-width: 650px; margin: 0 auto; }
@@ -209,6 +235,73 @@ export default function ServicesPage() {
         .why-card h3 { font-size: 16px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
         .why-card p { font-size: 13px; color: var(--text-medium); line-height: 1.6; margin: 0; }
 
+<<<<<<< HEAD
+=======
+        /* Get In Touch section */
+        .services-git-section {
+          background: #ffffff;
+          padding: 64px 2rem;
+          text-align: center;
+          border-top: 1px solid var(--border-light);
+        }
+
+        .services-git-inner {
+          max-width: 700px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .services-git-title {
+          font-size: clamp(28px, 4vw, 42px);
+          font-weight: 800;
+          font-family: var(--font-headers);
+          line-height: 1.1;
+        }
+
+        .services-git-title .orange-text {
+          color: var(--secondary-color);
+        }
+
+        .services-git-title .blue-text {
+          color: var(--primary-color);
+        }
+
+        .services-git-desc {
+          color: var(--text-medium);
+          font-size: 15px;
+          line-height: 1.65;
+          max-width: 600px;
+          font-weight: 400;
+        }
+
+        .services-git-btn {
+          background-color: var(--primary-color);
+          color: white;
+          border: none;
+          padding: 12px 32px;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 15px;
+          text-decoration: none;
+          display: inline-block;
+          transition: var(--transition-smooth);
+          box-shadow: 0 4px 14px rgba(10, 88, 164, 0.15);
+        }
+
+        .services-git-btn:hover {
+          background-color: var(--primary-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(10, 88, 164, 0.25);
+        }
+
+        .services-git-btn:active {
+          transform: translateY(0);
+        }
+
+>>>>>>> 4d65c12d32117059894ff540579bea8645f692da
         @media (max-width: 768px) {
           .services-grid { grid-template-columns: 1fr; }
           .services-why-grid { grid-template-columns: repeat(2, 1fr); }

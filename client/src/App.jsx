@@ -14,6 +14,7 @@ import ShippingPolicyPage from "./components/ShippingPolicyPage";
 import RefundPolicyPage from "./components/RefundPolicyPage";
 import ServicesPage from './components/ServicesPage';
 import PrivacyPolicyPage from "./components/PrivacyPolicyPage";
+import AccountPage from "./components/AccountPage";
 import BookingCalendarPage from './components/BookingCalendarPage';
 import OnlineConsultationPage from './components/OnlineConsultationPage';
 import ContactPage from './components/ContactPage';
@@ -176,6 +177,10 @@ function App() {
         
         {/* Online Consultation Route */}
         <Route path="/consultation" element={ <OnlineConsultationPage onLoginClick={() => setIsAuthOpen(true)}  /> } />    
+
+         <Route path="/account" element={<AccountPage />} />
+<Route path="/orders" element={<AccountPage />} />
+<Route path="/wishlist" element={<AccountPage />} /> 
 
          <Route path="/terms" element={<TermsPage />} />
 
