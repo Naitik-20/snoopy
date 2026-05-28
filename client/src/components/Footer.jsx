@@ -35,6 +35,13 @@ export default function Footer() {
     { label: 'Contact Us', path: '/contact' },
   ];
 
+  const policies = [
+  { label: 'Privacy Policy', path: '/privacy-policy' },
+  { label: 'Terms & Conditions', path: '/terms' },
+  { label: 'Shipping Policy', path: '/shipping-policy' },
+  { label: 'Refund Policy', path: '/refund-policy' },
+];
+
   const topBrands = ['Royal Canin', 'Pedigree', 'Drools', 'Whiskas', 'Himalaya', 'Purepet'];
 
   return (
@@ -132,6 +139,23 @@ export default function Footer() {
             ))}
           </ul>
         </div>
+
+
+{/* Policies */}
+<div className="footer-col">
+  <h4 className="footer-col-title">Policies</h4>
+
+  <ul className="footer-link-list">
+    {policies.map((policy) => (
+      <li key={policy.label}>
+        <Link to={policy.path} className="footer-link">
+          <ArrowRight size={12} />
+          {policy.label}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</div>
 
         {/* Column 4: Contact */}
         <div className="footer-col">
