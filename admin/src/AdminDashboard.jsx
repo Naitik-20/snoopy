@@ -33,8 +33,10 @@ export default function AdminDashboard() {
     name: '',
     brand: '',
     category: 'Foods',
-    price: '',
-    originalPrice: '',
+    retailPrice: '',
+    wholesalerPrice: '',
+    moq: '',
+    stock: '',
     description: '',
     composition: '',
     dosage: '',
@@ -55,8 +57,8 @@ export default function AdminDashboard() {
     try {
       const res = await fetch(`${BACKEND_URL}/api/products`);
       const data = await res.json();
-      if (data.status === 'success') {
-        setProducts(data.data);
+      if (res.ok) {
+        setProducts(data);
       }
     } catch (err) {
       console.error('Error fetching products:', err);
@@ -102,8 +104,10 @@ export default function AdminDashboard() {
       name: '',
       brand: '',
       category: 'Foods',
-      price: '',
-      originalPrice: '',
+      retailPrice: '',
+      wholesalerPrice: '',
+      moq: '',
+      stock: '',
       description: '',
       composition: '',
       dosage: '',
@@ -116,27 +120,45 @@ export default function AdminDashboard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.price || !form.category || !imageFile) {
-      setActionStatus({ type: 'error', message: 'Please fill in Name, Price, Category, and upload an Image.' });
-      return;
-    }
+    if (
+  !form.name ||
+  !form.retailPrice ||
+  !form.wholesalerPrice ||
+  !form.moq ||
+  !form.category ||
+  !imageFile
+) {
+  setActionStatus({
+    type: 'error',
+    message: 'Please fill all required fields.'
+  });
+  return;
+}
+
+ if (Number(form.wholesalerPrice) >= Number(form.retailPrice)) {
+    setActionStatus({
+      type: 'error',
+      message: 'Wholesale price must be less than retail price.'
+    });
+    return;
+  }
 
     setUploading(true);
     setActionStatus(null);
 
     const formData = new FormData();
     Object.entries(form).forEach(([key, val]) => formData.append(key, val));
-    formData.append('image', imageFile);
+    formData.append('thumbnail', imageFile);
 
     try {
-      const res = await fetch(`${BACKEND_URL}/api/products`, {
+      const res = await fetch(`${BACKEND_URL}/api/products/add`, {
         method: 'POST',
         body: formData,
       });
       const data = await res.json();
 
-      if (data.status === 'success') {
-        setActionStatus({ type: 'success', message: `✅ Product "${data.data.name}" uploaded successfully!` });
+      if (data.product) {
+        setActionStatus({ type: 'success', message: `✅ Product "${data.product.name}" uploaded successfully!` });
         fetchAllProducts();
         setTimeout(() => {
           handleReset();
@@ -190,8 +212,8 @@ export default function AdminDashboard() {
 
   // Live Preview Card
   const LivePreviewCard = () => {
-    const price = parseFloat(form.price) || 0;
-    const originalPrice = parseFloat(form.originalPrice) || 0;
+    const price = parseFloat(form.retailPrice) || 0;
+    const originalPrice = parseFloat(form.wholesalerPrice) || 0;
     const discount = originalPrice > price && price > 0
       ? Math.round(((originalPrice - price) / originalPrice) * 100)
       : 0;
@@ -398,24 +420,24 @@ export default function AdminDashboard() {
                         </thead>
                         <tbody>
                           {products.slice(-4).reverse().map((prod) => (
-                            <tr key={prod.id}>
+                            <tr key={prod._id}>
                               <td>
                                 <div className="product-table-cell-detail">
                                   <img 
-                                    src={`${BACKEND_URL}${prod.image}`} 
+                                    src={`${BACKEND_URL}${prod.thumbnail}`} 
                                     alt={prod.name} 
                                     className="prod-table-thumb"
                                     onError={(e) => { e.target.src = 'https://placehold.co/100'; }}
                                   />
                                   <div>
                                     <div className="prod-cell-name">{prod.name}</div>
-                                    <span className="prod-cell-id">ID: {prod.id}</span>
+                                    <span className="prod-cell-id">ID: {prod._id}</span>
                                   </div>
                                 </div>
                               </td>
                               <td><span className="category-pill">{prod.category}</span></td>
                               <td><strong>{prod.brand}</strong></td>
-                              <td><strong className="cell-price">₹{prod.price.toFixed(2)}</strong></td>
+                              <td><strong className="cell-price">₹{prod.retailPrice.toFixed(2)}</strong></td>
                             </tr>
                           ))}
                         </tbody>
@@ -466,34 +488,34 @@ export default function AdminDashboard() {
                           <th>Product info</th>
                           <th>Category</th>
                           <th>Brand</th>
-                          <th>Sale Price</th>
-                          <th>Original Price</th>
+                          <th>Retail Price</th>
+                          <th>Wholesaler Price</th>
                           <th className="align-center">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {filteredProducts.map((prod) => (
-                          <tr key={prod.id}>
+                          <tr key={prod._id}>
                             <td>
                               <div className="product-table-cell-detail">
                                 <img 
-                                  src={`${BACKEND_URL}${prod.image}`} 
+                                  src={`${BACKEND_URL}${prod.thumbnail}`} 
                                   alt={prod.name} 
                                   className="prod-table-thumb"
                                   onError={(e) => { e.target.src = 'https://placehold.co/100'; }}
                                 />
                                 <div>
                                   <div className="prod-cell-name">{prod.name}</div>
-                                  <span className="prod-cell-id">ID: {prod.id}</span>
+                                  <span className="prod-cell-id">ID: {prod._id}</span>
                                 </div>
                               </div>
                             </td>
                             <td><span className="category-pill">{prod.category}</span></td>
                             <td><strong>{prod.brand}</strong></td>
-                            <td><strong className="cell-price">₹{prod.price.toFixed(2)}</strong></td>
+                            <td><strong className="cell-price">₹{prod.retailPrice.toFixed(2)}</strong></td>
                             <td>
                               <span className="cell-original-price">
-                                {prod.originalPrice ? `₹${prod.originalPrice.toFixed(2)}` : '—'}
+                                {prod.wholesalerPrice ? `₹${prod.wholesalerPrice.toFixed(2)}` : '—'}
                               </span>
                             </td>
                             <td className="align-center">
@@ -577,11 +599,11 @@ export default function AdminDashboard() {
 
                     <div className="form-row-2">
                       <div className="form-group">
-                        <label>Sale Price (₹) <span className="required">*</span></label>
+                        <label>Retail Price (₹) <span className="required">*</span></label>
                         <input
                           type="number"
-                          name="price"
-                          value={form.price}
+                          name="retailPrice"
+                          value={form.retailPrice}
                           onChange={handleChange}
                           placeholder="400"
                           min="0"
@@ -590,11 +612,11 @@ export default function AdminDashboard() {
                         />
                       </div>
                       <div className="form-group">
-                        <label>Original List Price (₹)</label>
+                        <label>Wholesaler Price (₹) <span className="required">*</span></label>
                         <input
                           type="number"
-                          name="originalPrice"
-                          value={form.originalPrice}
+                          name="wholesalerPrice"
+                          value={form.wholesalerPrice}
                           onChange={handleChange}
                           placeholder="418"
                           min="0"
@@ -602,7 +624,35 @@ export default function AdminDashboard() {
                           className="form-input"
                         />
                       </div>
+                      <div className="form-group">
+                        <label>MOQ <span className="required">*</span></label>
+                        <input
+                         type="number"
+                         name="moq"
+                         value={form.moq}
+                         onChange={handleChange}
+                         placeholder="10"
+                         min="1"
+                         className="form-input"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>Stock <span className="required">*</span></label>
+                        <input
+                        type="number"
+                        name="stock"
+                        value={form.stock}
+                        onChange={handleChange}
+                        placeholder="100"
+                        min="0"
+                        className="form-input"
+                       />
+                     </div>
                     </div>
+
+
+
 
                     <div className="form-group">
                       <label>Brief Catalog Description</label>
